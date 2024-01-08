@@ -50,7 +50,7 @@ exports.updatePost = [
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       // Send errors
-      res.status(400).json({ errors: error.array() });
+      res.status(400).json({ errors: errors.array() });
     } else {
       // Create new post object
       const post = new Post({
@@ -70,7 +70,6 @@ exports.deletePost = [
   verifyToken,
   protectRoute,
   asyncHandler(async (req, res, next) => {
-    // TODO: JWT
     // Delete post
     const deletedPost = await Post.findByIdAndDelete(req.params.id);
     if (deletedPost) {

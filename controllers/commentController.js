@@ -5,7 +5,7 @@ const { verifyToken, protectRoute } = require("../authMiddleware");
 
 exports.getAllComments = asyncHandler(async (req, res, next) => {
   // Get all comments
-  const allComments = await Comment.find();
+  const allComments = await Comment.find({post: req.params.id});
   res.send(allComments);
 });
 
