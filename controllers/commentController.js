@@ -21,7 +21,7 @@ exports.createComment = [
     } else {
       const comment = new Comment({
         content: req.body.content,
-        post: ObjectId(req.body.postId),
+        post: new ObjectId(req.body.postId),
       });
       // Save comment
       await comment.save();
