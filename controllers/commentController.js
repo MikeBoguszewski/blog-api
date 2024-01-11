@@ -12,6 +12,7 @@ exports.getAllComments = asyncHandler(async (req, res, next) => {
 exports.createComment = [
   // Validate and sanitize
   body("content", "Content cannot be empty").trim().isLength({ min: 1 }).escape(),
+  body("postId", "PostId cannot be empty").trim().isLength({ min: 1 }).escape(),
   asyncHandler(async (req, res, next) => {
     const errors = validationResult(req);
     // Send errors
@@ -20,7 +21,7 @@ exports.createComment = [
     } else {
       const comment = new Comment({
         content: req.body.content,
-        post: req.params.postId,
+        post: req.body.postId,
       });
       // Save comment
       await comment.save();
