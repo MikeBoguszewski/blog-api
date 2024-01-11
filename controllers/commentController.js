@@ -1,7 +1,6 @@
 const Comment = require("../models/comment");
 const asyncHandler = require("express-async-handler");
 const { body, validationResult } = require("express-validator");
-const { verifyToken, protectRoute } = require("../authMiddleware");
 
 exports.getAllComments = asyncHandler(async (req, res, next) => {
   // Get all comments
@@ -21,7 +20,7 @@ exports.createComment = [
     } else {
       const comment = new Comment({
         content: req.body.content,
-        post: req.body.postId,
+        post: ObjectId(req.body.postId),
       });
       // Save comment
       await comment.save();
