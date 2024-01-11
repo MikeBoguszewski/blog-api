@@ -1,6 +1,7 @@
 const Comment = require("../models/comment");
 const asyncHandler = require("express-async-handler");
 const { body, validationResult } = require("express-validator");
+const { ObjectId } = require("mongodb");
 
 exports.getAllComments = asyncHandler(async (req, res, next) => {
   // Get all comments
