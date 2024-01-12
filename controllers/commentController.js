@@ -5,7 +5,7 @@ const { ObjectId } = require("mongodb");
 
 exports.getAllComments = asyncHandler(async (req, res, next) => {
   // Get all comments
-  const allComments = await Comment.find({post: req.params.id});
+  const allComments = await Comment.find({ post: new ObjectId(req.body.postId) });
   res.send(allComments);
 });
 
