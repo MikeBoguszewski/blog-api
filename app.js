@@ -38,7 +38,7 @@ app.use("/api", commentsRouter);
 
 // JSON Web Token
 app.post("/api/login", async (req, res, next) => {
-  const {usename, password} = req.body
+  const {username, password} = req.body
   const DBUser = await User.find({ username});
   const passwordMatch = await bcrypt.compare(password, DBUser.password);
   if (DBUser && passwordMatch) {
