@@ -40,8 +40,6 @@ app.use("/api", commentsRouter);
 app.post("/api/login", async (req, res, next) => {
   const {username, password} = req.body
   const DBUser = await User.findOne({username});
-  console.log(DBUser);
-  console.log(password, DBUser.password);
   const passwordMatch = await bcrypt.compare(password, DBUser.password);
   if (DBUser && passwordMatch) {
     jwt.sign({username, password}, process.env.JWT_KEY, (err, token) => {
