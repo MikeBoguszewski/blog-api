@@ -56,7 +56,7 @@ exports.updatePost = [
       const post = new Post({
         title: req.body.title,
         content: req.body.content,
-        published: false,
+        published: req.body.published,
         _id: req.params.id,
       });
       // Update post
