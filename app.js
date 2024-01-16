@@ -8,6 +8,7 @@ const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const postsRouter = require("./routes/posts");
 const commentsRouter = require("./routes/comments");
+const User = require("./models/user");
 
 const app = express();
 
@@ -40,14 +41,20 @@ app.post("/api/login", (req, res, next) => {
     username: req.body.username,
     password: req.body.password,
   };
-  jwt.sign({ user }, process.env.JWT_KEY, (err, token) => {
-    if (err) {
-      console.error("Error generating token:", err);
-      res.status(500).json({ error: "Internal Server Error" });
-    } else {
-      res.send({ token });
-    }
-  });
+  const DBUser = User.find({ username: user.username });
+  if (DBUser && user.password === DBUser.password) {
+    jwt.sign({ user }, process.env.JWT_KEY, (err, token) => {
+      if (err) {
+        console.error("Error generating token:", err);
+        res.status(500).json({ error: "Internal Server Error" });
+      } else {
+        res.send({ token });
+      }
+    });
+    res.send({ message: "Login successful" });
+  } else {
+    res.status(401).json({ message: "Invalid username or password" });
+  }
 });
 
 // catch 404 and forward to error handler
