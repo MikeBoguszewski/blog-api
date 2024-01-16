@@ -9,6 +9,7 @@ const jwt = require("jsonwebtoken");
 const postsRouter = require("./routes/posts");
 const commentsRouter = require("./routes/comments");
 const User = require("./models/user");
+const bcrypt = require("bcrypt");
 
 const app = express();
 
@@ -36,13 +37,11 @@ app.use("/api", postsRouter);
 app.use("/api", commentsRouter);
 
 // JSON Web Token
-app.post("/api/login", (req, res, next) => {
-  const user = {
-    username: req.body.username,
-    password: req.body.password,
-  };
-  const DBUser = User.find({ username: user.username });
-  if (DBUser && user.password === DBUser.password) {
+app.post("/api/login", async (req, res, next) => {
+  const {usename, password} = req.body
+  const DBUser = await User.find({ username});
+  const passwordMatch = await bcrypt.compare(password, DBUser.password);
+  if (DBUser && passwordMatch) {
     jwt.sign({ user }, process.env.JWT_KEY, (err, token) => {
       if (err) {
         console.error("Error generating token:", err);
