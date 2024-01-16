@@ -39,10 +39,12 @@ app.use("/api", commentsRouter);
 // JSON Web Token
 app.post("/api/login", async (req, res, next) => {
   const {username, password} = req.body
-  const DBUser = await User.find({ username});
+  const DBUser = await User.findOne({username});
+  console.log(DBUser);
+  console.log(password, DBUser.password);
   const passwordMatch = await bcrypt.compare(password, DBUser.password);
   if (DBUser && passwordMatch) {
-    jwt.sign({ user }, process.env.JWT_KEY, (err, token) => {
+    jwt.sign({username, password}, process.env.JWT_KEY, (err, token) => {
       if (err) {
         console.error("Error generating token:", err);
         res.status(500).json({ error: "Internal Server Error" });
@@ -50,7 +52,6 @@ app.post("/api/login", async (req, res, next) => {
         res.send({ token });
       }
     });
-    res.send({ message: "Login successful" });
   } else {
     res.status(401).json({ message: "Invalid username or password" });
   }
